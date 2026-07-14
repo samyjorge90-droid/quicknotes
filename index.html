@@ -10,8 +10,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0284c7">
     
-    <!-- Manifesto PWA Embutido via Data URI -->
-    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22QuickNotes%20IA%22%2C%22short_name%22%3A%22QuickNotes%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%20xmlns%3D%2522http%3A//www.w3.org/2000/svg%2522%20viewBox%3D%25220%200%20100%20100%2522%253E%253Crect%20width%3D%2522100%2522%20height%3D%2522100%2522%20rx%3D%252222%2522%20fill%3D%2522%25230284c7%2522/%253E%253Ctext%20y%3D%2522.9em%2522%20font-size%3D%252290%2522%253E%25F0%259F%2593%259D%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%2C%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%20xmlns%3D%2522http%3A//www.w3.org/2000/svg%2522%20viewBox%3D%25220%200%20100%20100%2522%253E%253Crect%20width%3D%2522100%2522%20height%3D%2522100%2522%20rx%3D%252222%2522%20fill%3D%2522%25230284c7%2522/%253E%253Ctext%20y%3D%2522.9em%2522%20font-size%3D%252290%2522%253E%25F0%259F%2593%259D%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%5D%7D">
+    <!-- Manifesto PWA Embutido via Data URI apontando para ícones físicos locais -->
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22QuickNotes%20IA%22%2C%22short_name%22%3A%22QuickNotes%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22./icon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/png%22%7D%2C%7B%22src%22%3A%22./icon-512.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/png%22%7D%5D%7D">
 
     <!-- Tailwind CSS para design responsivo e moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -314,7 +314,7 @@
                 </div>
             </div>
 
-            <!-- Barra de Formatação Rápida (Otimizada para Dedos) -->
+            <!-- Barra de Formatação Rápida (Otimizada para Dedos - Botões Maiores no Telemóvel) -->
             <div class="px-3 py-2 border-b border-gray-150 dark:border-gray-700/60 flex items-center space-x-2 bg-gray-50/30 dark:bg-gray-800/30 overflow-x-auto custom-scrollbar smooth-all flex-shrink-0">
                 <button onclick="insertFormat('**', '**')" class="px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs font-bold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-90 min-h-[34px] min-w-[34px]" title="Negrito">B</button>
                 <button onclick="insertFormat('*', '*')" class="px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs italic rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-90 min-h-[34px] min-w-[34px]" title="Itálico">I</button>
@@ -322,7 +322,7 @@
                     <span>• Lista</span>
                 </button>
                 <button onclick="insertFormat('- [ ] ')" class="px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center space-x-1 min-h-[34px]" title="Lista de Tarefas">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                     <span>Tarefas</span>
@@ -359,7 +359,7 @@
                 </div>
             </div>
 
-            <!-- Ações Principais de Envio (Slim, Otimizadas e Animadas) -->
+            <!-- Ações Principais de Envio (Alvos de Toque Grandes) -->
             <div class="p-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80 flex flex-row gap-2 smooth-all flex-shrink-0">
                 <!-- Copiar e Prontificar para IA -->
                 <button id="copyToIABtn" onclick="copyAndPrepareForIA()" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-semibold py-1.5 px-3 rounded-lg flex items-center justify-center space-x-1.5 text-xs shadow-sm hover:shadow hover:scale-[1.02] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 min-h-[44px]">
@@ -589,7 +589,7 @@
             }
         }
 
-        // --- REGISTO DO SERVICE WORKER ---
+        // --- REGISTO DO SERVICE WORKER COM CAMINHO EXATO DO ARQUIVO LOCAL ---
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
@@ -654,7 +654,7 @@
             showToast('Notas de demonstração carregadas!', 'success');
         }
 
-        // NOVO: Função para Descarregar a Nota Atual em formato .txt com Título Personalizado ou Fallback Inteligente (Via Data URI robusto)
+        // Função para Descarregar a Nota Atual em formato .txt com Título Personalizado ou Fallback Inteligente (Via Data URI robusto)
         function downloadNoteAsTxt() {
             if (!currentNoteId) {
                 showToast('Nenhuma nota selecionada para descarregar!', 'error');
@@ -1016,6 +1016,7 @@
             }, 300);
         }
 
+        // Confirmação de Eliminação
         function confirmDeleteCurrentNote() {
             if (!currentNoteId) return;
 
