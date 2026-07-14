@@ -2,11 +2,20 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>QuickNotes IA - Notas Rápidas Offline</title>
-    <!-- Tailwind CSS para um design moderno, limpo e totalmente responsivo -->
+    
+    <!-- Meta Tags para PWA e Integração com Telemóvel -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0284c7">
+    
+    <!-- Manifesto PWA Embutido via Data URI -->
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22QuickNotes%20IA%22%2C%22short_name%22%3A%22QuickNotes%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%20xmlns%3D%2522http%3A//www.w3.org/2000/svg%2522%20viewBox%3D%25220%200%20100%20100%2522%253E%253Crect%20width%3D%2522100%2522%20height%3D%2522100%2522%20rx%3D%252222%2522%20fill%3D%2522%25230284c7%2522/%253E%253Ctext%20y%3D%2522.9em%2522%20font-size%3D%252290%2522%253E%25F0%259F%2593%259D%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%2C%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%20xmlns%3D%2522http%3A//www.w3.org/2000/svg%2522%20viewBox%3D%25220%200%20100%20100%2522%253E%253Crect%20width%3D%2522100%2522%20height%3D%2522100%2522%20rx%3D%252222%2522%20fill%3D%2522%25230284c7%2522/%253E%253Ctext%20y%3D%2522.9em%2522%20font-size%3D%252290%2522%253E%25F0%259F%2593%259D%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%5D%7D">
+
+    <!-- Tailwind CSS para design responsivo e moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Biblioteca offline para geração de QR Codes de partilha imediata -->
+    <!-- Biblioteca offline para geração de QR Codes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         tailwind.config = {
@@ -27,7 +36,12 @@
         }
     </script>
     <style>
-        /* Estilos personalizados para barras de rolagem e suavidade */
+        /* Estilos de toque rápidos e sem lag de clique */
+        button, a, [role="button"] {
+            touch-action: manipulation;
+        }
+
+        /* Estilos personalizados de rolagem */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
@@ -38,12 +52,13 @@
             background-color: rgba(156, 163, 175, 0.4);
             border-radius: 3px;
         }
-        /* Previne o zoom padrão forçado em campos de texto no iOS/Android */
+        
+        /* Previne o zoom forçado em inputs de texto no telemóvel */
         input, textarea {
             font-size: 16px !important;
         }
 
-        /* --- ANIMAÇÕES PERSONALIZADAS --- */
+        /* --- ANIMAÇÕES --- */
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -74,55 +89,30 @@
             50% { height: 16px; }
         }
 
-        /* --- ANIMAÇÃO ATUALIZADA: MOVIMENTO DA BASE (CONECTOR FÍSICO) --- */
+        /* --- ANIMAÇÃO: MOVIMENTO DA BASE (CONECTOR FÍSICO) --- */
         @keyframes containerBounce {
-            0% {
-                /* No topo do salto: alongada verticalmente */
-                transform: translateY(-32px) scaleX(0.9) scaleY(1.1);
-            }
-            34% {
-                /* Quase a tocar no chão */
-                transform: translateY(0) scaleX(0.95) scaleY(1.05);
-            }
-            36% {
-                /* TOQUE INICIAL: começa a achatar */
-                transform: translateY(0) scaleX(1.1) scaleY(0.9);
-            }
-            42% {
-                /* IMPACTO MÁXIMO: Esmaga completamente no chão */
-                transform: translateY(0) scaleX(1.22) scaleY(0.78);
-            }
-            54% {
-                /* ESTABILIZAÇÃO NO CHÃO */
-                transform: translateY(0) scaleX(1.04) scaleY(0.96);
-            }
-            60% {
-                /* PREPARAÇÃO PARA SUBIR: Começa a esticar para cima */
-                transform: translateY(0) scaleX(0.95) scaleY(1.05);
-            }
-            62% {
-                /* DESCOLO DA BASE: perde o contacto físico */
-                transform: translateY(-2px) scaleX(0.9) scaleY(1.1);
-            }
-            100% {
-                /* Regresso ao topo */
-                transform: translateY(-32px) scaleX(0.9) scaleY(1.1);
-            }
+            0% { transform: translateY(-24px) scaleX(0.95) scaleY(1.05); }
+            34% { transform: translateY(0) scaleX(0.98) scaleY(1.02); }
+            36% { transform: translateY(0) scaleX(1.08) scaleY(0.92); }
+            42% { transform: translateY(0) scaleX(1.15) scaleY(0.85); }
+            54% { transform: translateY(0) scaleX(1.02) scaleY(0.98); }
+            60% { transform: translateY(0) scaleX(0.98) scaleY(1.02); }
+            62% { transform: translateY(-2px) scaleX(0.95) scaleY(1.05); }
+            100% { transform: translateY(-24px) scaleX(0.95) scaleY(1.05); }
         }
 
         /* --- ANIMAÇÃO DE BRILHO: APENAS NAS LINHAS DA LÂMPADA --- */
         @keyframes bulbFlicker {
             0%, 34% {
-                color: rgba(156, 163, 175, 1); /* Cinzento (Apagada) */
+                color: rgba(156, 163, 175, 1);
                 filter: drop-shadow(0 0 0 rgba(234, 179, 8, 0));
             }
             36%, 60% {
-                color: rgba(234, 179, 8, 1); /* Amarelo (Acesa) */
-                /* Brilho néon focado apenas nas linhas do SVG */
+                color: rgba(234, 179, 8, 1);
                 filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.85)) drop-shadow(0 0 16px rgba(234, 179, 8, 0.4));
             }
             62%, 100% {
-                color: rgba(156, 163, 175, 1); /* Cinzento (Apagada) */
+                color: rgba(156, 163, 175, 1);
                 filter: drop-shadow(0 0 0 rgba(234, 179, 8, 0));
             }
         }
@@ -135,12 +125,11 @@
             animation: bulbFlicker 2s infinite cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* Transições globais ultra suaves */
         .smooth-all {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Barras de áudio dinâmicas para o ditado de voz */
+        /* Ondas de som do microfone */
         .voice-bar {
             width: 3px;
             background-color: currentColor;
@@ -151,40 +140,52 @@
         .voice-bar:nth-child(3) { animation-delay: 0.3s; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-500 font-sans">
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 h-screen overflow-hidden flex flex-col transition-colors duration-500 font-sans select-none">
 
-    <!-- Cabeçalho Principal -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30 shadow-sm smooth-all">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-brand-500 text-white p-2 rounded-lg shadow-md hover:rotate-3 transition-transform duration-300">
-                    <!-- Ícone de Bloco de Notas -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <!-- Cabeçalho Principal (Otimizado e Compacto) -->
+    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30 shadow-sm flex-shrink-0 smooth-all">
+        <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <!-- Botão de Menu Hambúrguer (Mobile - Excelente Alvo de Toque de 44x44px) -->
+                <button id="menuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center min-w-[42px] min-h-[42px]" onclick="toggleSidebar()" title="Abrir Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
+                <div class="bg-brand-500 text-white p-1.5 rounded-lg shadow-md hover:rotate-3 transition-transform duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-none">QuickNotes IA</h1>
-                    <span class="text-xs text-gray-500 dark:text-gray-400">Ideias limpas e prontas para copiar</span>
+                    <h1 class="font-bold text-sm leading-none sm:text-base">QuickNotes IA</h1>
+                    <span class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400">Ideias prontas para copiar</span>
                 </div>
             </div>
 
-            <!-- Controles Globais de Utilidade -->
-            <div class="flex items-center space-x-2">
-                <!-- Botão de Alternar Tema Claro/Escuro -->
-                <button id="themeToggle" class="p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 smooth-all hover:scale-105 active:scale-95 flex items-center justify-center" title="Alternar Modo Escuro/Claro">
-                    <!-- Sol para quando estiver no Dark -->
+            <!-- Controles Globais -->
+            <div class="flex items-center space-x-1.5">
+                <!-- Botão de Instalar App (PWA) -->
+                <button id="installPwaBtn" class="hidden bg-brand-500 hover:bg-brand-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold shadow flex items-center space-x-1 transition-all duration-200 transform hover:scale-105 active:scale-95" onclick="triggerPwaInstallation()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span class="hidden sm:inline">Instalar App</span>
+                </button>
+
+                <!-- Alternar Tema -->
+                <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 smooth-all hover:scale-105 active:scale-95 flex items-center justify-center" title="Alternar Modo Escuro/Claro">
                     <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
                     </svg>
-                    <!-- Lua para quando estiver no Light -->
                     <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                 </button>
 
-                <!-- Botão de Sincronização / Backup -->
-                <button id="backupBtn" class="p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 smooth-all hover:scale-105 active:scale-95" title="Backup e Exportação">
+                <!-- Backup -->
+                <button id="backupBtn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 smooth-all hover:scale-105 active:scale-95" title="Backup e Exportação">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                     </svg>
@@ -194,34 +195,37 @@
     </header>
 
     <!-- Layout da Aplicação -->
-    <main class="flex-1 max-w-6xl w-full mx-auto p-4 flex flex-col md:flex-row gap-4 overflow-hidden relative">
+    <main class="flex-1 max-w-6xl w-full mx-auto p-3 flex flex-col md:flex-row gap-3 overflow-hidden relative">
         
-        <!-- Painel Lateral (Lista de Notas) com transição suave de colapso -->
-        <section id="sidebarPanel" class="w-full md:w-80 flex flex-col bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm h-[calc(100vh-6rem)] md:h-[calc(100vh-7rem)] transition-all duration-300 ease-in-out">
-            <div class="p-4 border-b border-gray-200 dark:border-gray-700 space-y-3">
+        <!-- Overlay para fechar Menu Lateral no Telemóvel -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-30 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden" onclick="closeSidebar()"></div>
+
+        <!-- Painel Lateral (Lista de Notas) - Adaptado para deslizar no Telemóvel -->
+        <section id="sidebarPanel" class="fixed md:relative inset-y-0 left-0 -translate-x-full md:translate-x-0 w-72 flex flex-col bg-white dark:bg-gray-800 rounded-r-xl md:rounded-xl border-r md:border border-gray-200 dark:border-gray-700 overflow-hidden shadow-2xl md:shadow-sm h-full z-40 transition-transform duration-300 ease-in-out flex-shrink-0">
+            <div class="p-3 border-b border-gray-200 dark:border-gray-700 space-y-2">
                 <div class="flex items-center justify-between">
-                    <h2 class="font-semibold text-gray-700 dark:text-gray-300">Minhas Notas</h2>
-                    <span id="noteCount" class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full text-gray-500">0 notas</span>
+                    <h2 class="font-semibold text-sm text-gray-700 dark:text-gray-300">Minhas Notas</h2>
+                    <span id="noteCount" class="text-[10px] bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full text-gray-500">0 notas</span>
                 </div>
                 
                 <!-- Caixa de Pesquisa -->
                 <div class="relative">
-                    <input type="text" id="searchBar" placeholder="Pesquisar notas..." class="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white smooth-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <input type="text" id="searchBar" placeholder="Pesquisar notas..." class="w-full pl-8 pr-3 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white smooth-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 absolute left-2.5 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
             </div>
 
             <!-- Lista Dinâmica de Notas -->
-            <div id="notesList" class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
+            <div id="notesList" class="flex-1 overflow-y-auto custom-scrollbar p-1.5 space-y-1 select-none">
                 <!-- Conteúdo preenchido dinamicamente pelo JS -->
             </div>
 
             <!-- Botão de Criar Nova Nota -->
-            <div class="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <button id="newNoteBtn" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center space-x-2 shadow-md transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <div class="p-2.5 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <button id="newNoteBtn" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-3 rounded-lg flex items-center justify-center space-x-2 text-xs shadow-md transition-all duration-250 transform hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 min-h-[40px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
                     <span>Nova Nota / Ideia</span>
@@ -230,78 +234,79 @@
         </section>
 
         <!-- Editor de Ideias -->
-        <section id="editorPanel" class="flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm h-[calc(100vh-6rem)] md:h-[calc(100vh-7rem)] relative transition-all duration-300">
+        <section id="editorPanel" class="flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm h-full relative transition-all duration-300">
             
-            <!-- Estado Vazio (Quando nada está selecionado) -->
-            <div id="emptyState" class="absolute inset-0 bg-white dark:bg-gray-800 flex flex-col items-center justify-center p-8 text-center z-10 transition-all duration-300">
+            <!-- Estado Vazio -->
+            <div id="emptyState" class="absolute inset-0 bg-white dark:bg-gray-800 flex flex-col items-center justify-center p-6 text-center z-10 transition-all duration-300">
                 
-                <!-- CONTAINER DA LÂMPADA COM MOVIMENTO FÍSICO E BOLA DE FUNDO COM COR NEUTRA CONSTANTE -->
-                <div class="p-5 rounded-full mb-5 bg-gray-100 dark:bg-gray-700 animate-container-bounce smooth-all flex items-center justify-center">
-                    <!-- APENAS A LÂMPADA (SVG) TEM O EFEITO DE PISCAR E BRILHAR -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 animate-bulb-flicker" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- CONTAINER DA LÂMPADA COM BOLA DE FUNDO COM COR NEUTRA CONSTANTE -->
+                <div class="p-4 rounded-full mb-3 bg-gray-100 dark:bg-gray-700 animate-container-bounce smooth-all flex items-center justify-center">
+                    <!-- APENAS A LÂMPADA TEM O EFEITO DE PISCAR E BRILHAR -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 animate-bulb-flicker" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
                 </div>
                 
-                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">Qual é a tua próxima grande ideia?</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs mt-1">Cria uma nota rápida ou seleciona uma das tuas ideias na barra lateral.</p>
-                <div class="flex flex-col sm:flex-row gap-2 mt-4">
-                    <button onclick="createNewNote()" class="text-sm font-semibold text-white bg-brand-500 hover:bg-brand-600 px-5 py-2.5 rounded-lg transition-all hover:scale-105 shadow-md">
+                <h3 class="text-base font-bold text-gray-800 dark:text-gray-200">Qual é a tua próxima grande ideia?</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 max-w-xs mt-1">Cria uma nota rápida ou seleciona uma das tuas ideias na barra lateral.</p>
+                <div class="flex flex-col sm:flex-row gap-2 mt-3">
+                    <button onclick="createNewNote()" class="text-xs font-semibold text-white bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md min-h-[38px]">
                         + Começar agora
                     </button>
-                    <button onclick="loadDemoNotes()" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-brand-500 px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-brand-500 transition-colors">
+                    <button onclick="loadDemoNotes()" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-brand-500 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-brand-500 transition-colors min-h-[38px]">
                         Ver Notas de Demonstração
                     </button>
                 </div>
             </div>
 
             <!-- Barra de Ações do Editor -->
-            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/50 smooth-all">
-                <!-- Botão de Voltar para Mobile -->
-                <button id="backToListBtn" class="md:hidden mr-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                </button>
-
-                <!-- Botão Modo Foco (Zen) - Ocultar Barra Lateral em Desktop -->
-                <button onclick="toggleFocusMode()" class="hidden md:flex mr-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 smooth-all hover:rotate-90" title="Alternar Modo Foco">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="focusModeIcon">
+            <div class="p-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/50 smooth-all flex-shrink-0">
+                
+                <!-- Botão Modo Foco (Zen) -->
+                <button onclick="toggleFocusMode()" class="hidden md:flex mr-1.5 p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 smooth-all hover:rotate-90" title="Alternar Modo Foco">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="focusModeIcon">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
                 </button>
                 
                 <!-- Título da Nota -->
                 <div class="flex-1 min-w-0">
-                    <input type="text" id="noteTitle" placeholder="Título da Ideia..." class="w-full bg-transparent font-bold text-lg focus:outline-none border-b border-transparent hover:border-gray-300 focus:border-brand-500 dark:text-white truncate transition-colors" oninput="saveCurrentNote()">
+                    <input type="text" id="noteTitle" placeholder="Título da Ideia..." class="w-full bg-transparent font-bold text-base focus:outline-none border-b border-transparent hover:border-gray-300 focus:border-brand-500 dark:text-white truncate transition-colors select-text" oninput="saveCurrentNote()">
                 </div>
 
                 <!-- Ações Rápidas de topo -->
-                <div class="flex items-center space-x-1 ml-2">
+                <div class="flex items-center space-x-0.5 ml-2">
+                    <!-- Botão de Descarregar Nota em formato TXT -->
+                    <button id="downloadTxtBtn" onclick="downloadNoteAsTxt()" class="p-1.5 text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400 rounded-lg transition-all duration-200 transform hover:scale-115 active:scale-90" title="Descarregar Nota (.txt)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </button>
+
                     <!-- Botão de Ouvir Nota (Sintetizador Offline) -->
-                    <button id="ttsBtn" onclick="readAloud()" class="p-2 text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400 rounded-lg hover:scale-110 active:scale-95 transition-all" title="Ouvir Nota em Voz Alta">
+                    <button id="ttsBtn" onclick="readAloud()" class="p-1.5 text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400 rounded-lg transition-all duration-200 transform hover:scale-115 active:scale-90" title="Ouvir Nota em Voz Alta">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                         </svg>
                     </button>
 
                     <!-- Botão de Fixar/Favoritar Nota -->
-                    <button id="pinBtn" onclick="togglePinNote()" class="p-2 text-gray-400 hover:text-yellow-500 rounded-lg hover:scale-110 transition-all" title="Fixar Nota no Topo">
+                    <button id="pinBtn" onclick="togglePinNote()" class="p-1.5 text-gray-400 hover:text-yellow-500 rounded-lg transition-all duration-200 transform hover:scale-115 active:scale-90" title="Fixar Nota no Topo">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="pinIcon">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.36 1.242.588 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.176 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 12.08c-.773-.568-.375-1.81.588-1.81h4.908a1 1 0 00.951-.69l1.519-4.674z" />
                         </svg>
                     </button>
 
                     <!-- Indicador Visual Discreto de Salvo -->
-                    <span id="savedIndicator" class="text-xs text-green-500 font-semibold flex items-center bg-green-50 dark:bg-green-950/40 px-2 py-1 rounded-full smooth-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span id="savedIndicator" class="text-[10px] text-green-500 font-semibold flex items-center bg-green-50 dark:bg-green-950/40 px-1.5 py-0.5 rounded-full smooth-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                         Salvo
                     </span>
                     
                     <!-- Botão de Eliminar -->
-                    <button id="deleteNoteBtn" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg hover:scale-110 active:scale-95 transition-all" title="Eliminar Nota" onclick="openDeleteModal()">
+                    <button id="deleteNoteBtn" class="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-all duration-200 transform hover:scale-115 active:scale-90" title="Eliminar Nota" onclick="openDeleteModal()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
@@ -309,89 +314,88 @@
                 </div>
             </div>
 
-            <!-- Barra de Formatação Rápida de Texto (Markdown Helpers) -->
-            <div class="px-4 py-2 border-b border-gray-150 dark:border-gray-700/60 flex items-center space-x-2 bg-gray-50/30 dark:bg-gray-800/30 overflow-x-auto custom-scrollbar smooth-all">
-                <button onclick="insertFormat('**', '**')" class="px-3 py-1 text-xs font-bold rounded hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95 transition-all" title="Negrito">B</button>
-                <button onclick="insertFormat('*', '*')" class="px-3 py-1 text-xs italic rounded hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95 transition-all" title="Itálico">I</button>
-                <button onclick="insertFormat('- ')" class="px-2.5 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95 transition-all flex items-center space-x-1" title="Lista de Tópicos">
+            <!-- Barra de Formatação Rápida (Otimizada para Dedos) -->
+            <div class="px-3 py-2 border-b border-gray-150 dark:border-gray-700/60 flex items-center space-x-2 bg-gray-50/30 dark:bg-gray-800/30 overflow-x-auto custom-scrollbar smooth-all flex-shrink-0">
+                <button onclick="insertFormat('**', '**')" class="px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs font-bold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-90 min-h-[34px] min-w-[34px]" title="Negrito">B</button>
+                <button onclick="insertFormat('*', '*')" class="px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs italic rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-90 min-h-[34px] min-w-[34px]" title="Itálico">I</button>
+                <button onclick="insertFormat('- ')" class="px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center space-x-1 min-h-[34px]" title="Lista de Tópicos">
                     <span>• Lista</span>
                 </button>
-                <button onclick="insertFormat('- [ ] ')" class="px-2.5 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95 transition-all flex items-center space-x-1" title="Lista de Tarefas">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button onclick="insertFormat('- [ ] ')" class="px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center space-x-1 min-h-[34px]" title="Lista de Tarefas">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                     <span>Tarefas</span>
                 </button>
                 <div class="h-4 w-px bg-gray-300 dark:bg-gray-600 mx-1"></div>
                 <!-- Ditado de Voz Inteligente -->
-                <button id="micBtn" onclick="toggleSpeech()" class="px-3 py-1.5 text-xs rounded-lg hover:bg-brand-100 dark:hover:bg-brand-950/40 text-brand-500 border border-brand-200 dark:border-brand-800 flex items-center space-x-1.5 transition-all hover:scale-105 active:scale-95 relative overflow-hidden" title="Falar e Ditar Nota">
-                    <!-- Onda Sonora (Apenas aparece quando grava) -->
+                <button id="micBtn" onclick="toggleSpeech()" class="px-3 py-1.5 text-xs rounded-lg hover:bg-brand-100 dark:hover:bg-brand-950/40 text-brand-500 border border-brand-200 dark:border-brand-800 transition-all duration-200 transform hover:scale-105 active:scale-95 relative overflow-hidden min-h-[34px]" title="Falar e Ditar Nota">
                     <div id="waveContainer" class="hidden flex items-center space-x-0.5 h-4 text-brand-500 dark:text-brand-400">
                         <span class="voice-bar"></span>
                         <span class="voice-bar"></span>
                         <span class="voice-bar"></span>
                     </div>
-                    <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                     </svg>
-                    <span id="micBtnText" class="font-semibold">Ditar</span>
+                    <span id="micBtnText" class="font-semibold text-[11px]">Ditar</span>
                 </button>
             </div>
 
             <!-- Campo Principal do Editor -->
-            <div class="flex-1 p-4 flex flex-col">
-                <textarea id="noteContent" placeholder="Digita as tuas ideias fantásticas aqui..." class="flex-1 w-full bg-transparent resize-none focus:outline-none custom-scrollbar dark:text-gray-100 placeholder-gray-400" oninput="saveCurrentNote()"></textarea>
+            <div class="flex-1 p-3.5 flex flex-col overflow-hidden">
+                <textarea id="noteContent" placeholder="Escreve as tuas ideias aqui..." class="flex-1 w-full bg-transparent resize-none focus:outline-none custom-scrollbar dark:text-gray-100 placeholder-gray-400 overflow-y-auto select-text"></textarea>
             </div>
 
-            <!-- Barra de Rodapé do Editor: Contadores e Categorias -->
-            <div class="px-4 py-2 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-2 items-center bg-gray-50/20 dark:bg-gray-800/20 smooth-all">
-                <span class="text-xs font-semibold text-gray-400">Tag/Etiqueta:</span>
-                <input type="text" id="noteTag" placeholder="Ex: Ideia, Termux, Script" class="bg-gray-100 dark:bg-gray-700 text-xs px-2.5 py-1 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500 dark:text-white transition-shadow" oninput="saveCurrentNote()">
+            <!-- Barra de Rodapé do Editor: Contadores -->
+            <div class="px-3.5 py-2 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-2 items-center bg-gray-50/20 dark:bg-gray-800/20 smooth-all flex-shrink-0">
+                <span class="text-[11px] font-semibold text-gray-400">Tag/Etiqueta:</span>
+                <input type="text" id="noteTag" placeholder="Ex: Ideia, Termux" class="bg-gray-100 dark:bg-gray-700 text-[11px] px-2 py-1 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500 dark:text-white transition-shadow select-text" oninput="saveCurrentNote()">
                 
-                <div class="ml-auto flex items-center space-x-3 text-xs text-gray-400">
+                <div class="ml-auto flex items-center space-x-2 text-[10px] text-gray-400">
                     <span id="wordCounter">0 palavras</span>
                     <span>•</span>
                     <span id="charCounter">0 carateres</span>
                 </div>
             </div>
 
-            <!-- Ações Principais de Envio e Partilha -->
-            <div class="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80 flex flex-col sm:flex-row gap-2 smooth-all">
+            <!-- Ações Principais de Envio (Slim, Otimizadas e Animadas) -->
+            <div class="p-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80 flex flex-row gap-2 smooth-all flex-shrink-0">
                 <!-- Copiar e Prontificar para IA -->
-                <button id="copyToIABtn" onclick="copyAndPrepareForIA()" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.98] transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="copyToIABtn" onclick="copyAndPrepareForIA()" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-semibold py-1.5 px-3 rounded-lg flex items-center justify-center space-x-1.5 text-xs shadow-sm hover:shadow hover:scale-[1.02] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 min-h-[44px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                     </svg>
                     <span>Copiar e Enviar para IA</span>
                 </button>
 
                 <!-- Partilha Rápida por QR Code -->
-                <button onclick="openQRCodeModal()" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 hover:scale-[1.02] active:scale-[0.98] transition-all" title="Partilhar para o telemóvel principal por código QR">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button onclick="openQRCodeModal()" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-1.5 px-3 rounded-lg flex items-center justify-center space-x-1.5 text-xs hover:scale-[1.02] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 min-h-[44px]" title="Partilhar para o telemóvel principal por código QR">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                     </svg>
-                    <span class="sm:inline">Código QR</span>
+                    <span>Código QR</span>
                 </button>
             </div>
         </section>
     </main>
 
-    <!-- MODAL: Confirmação de Eliminação Personalizado (Animação de Elasticidade) -->
+    <!-- MODAL: Confirmação de Eliminação -->
     <div id="deleteModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative transform scale-95 transition-transform" id="deleteModalContent">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl relative transform scale-95 transition-transform" id="deleteModalContent">
             <div class="text-center">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 mb-4 animate-bounce">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="mx-auto flex items-center justify-center h-10 w-12 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 mb-3 animate-bounce">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Eliminar nota?</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Tens a certeza de que queres eliminar esta ideia? Esta ação não pode ser desfeita.</p>
-                <div class="mt-6 flex gap-3">
-                    <button onclick="closeDeleteModal()" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-semibold py-2.5 px-4 rounded-xl text-sm hover:scale-105 active:scale-95 transition-all">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white">Eliminar nota?</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tens a certeza de que queres eliminar esta ideia? Esta ação não pode ser desfeita.</p>
+                <div class="mt-5 flex gap-3">
+                    <button onclick="closeDeleteModal()" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-white font-semibold py-2.5 px-3 rounded-lg text-xs transition-all duration-200 transform hover:scale-105 active:scale-95 min-h-[38px]">
                         Cancelar
                     </button>
-                    <button onclick="confirmDeleteCurrentNote()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-4 rounded-xl text-sm hover:scale-105 active:scale-95 transition-all shadow-md shadow-red-500/20">
+                    <button onclick="confirmDeleteCurrentNote()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-3 rounded-lg text-xs transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md shadow-red-500/20 min-h-[38px]">
                         Eliminar
                     </button>
                 </div>
@@ -399,26 +403,25 @@
         </div>
     </div>
 
-    <!-- Modal do QR Code (Partilha Offline Instantânea) -->
+    <!-- MODAL: QR Code -->
     <div id="qrcodeModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative transform scale-95 transition-transform" id="qrcodeModalContent">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl relative transform scale-95 transition-transform" id="qrcodeModalContent">
             <button onclick="closeQRCodeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:scale-110 active:scale-90 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
 
             <div class="text-center">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Partilhar Offline</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-4">Aponte a câmara do teu telemóvel principal ou Google Lens para este código para copiar tudo instantaneamente!</p>
+                <h3 class="text-base font-bold text-gray-900 dark:text-white">Partilhar Offline</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">Aponte a câmara do teu telemóvel principal ou Google Lens para este código para copiar tudo instantaneamente!</p>
                 
-                <!-- Onde o QR Code é gerado -->
-                <div class="bg-white p-4 rounded-xl inline-block shadow-inner mx-auto mb-4 hover:scale-[1.03] transition-transform duration-300" id="qrcodeCanvas"></div>
+                <div class="bg-white p-3 rounded-xl inline-block shadow-inner mx-auto mb-3 hover:scale-[1.02] transition-transform duration-300" id="qrcodeCanvas"></div>
                 
-                <p class="text-xs text-gray-400 italic max-h-24 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-2 rounded border border-gray-200 dark:border-gray-700 text-left" id="qrcodeTextPreview"></p>
+                <p class="text-[11px] text-gray-400 italic max-h-20 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-2 rounded border border-gray-200 dark:border-gray-700 text-left select-text" id="qrcodeTextPreview"></p>
 
                 <div class="mt-4 flex gap-2">
-                    <button onclick="closeQRCodeModal()" class="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 text-gray-800 dark:text-white font-semibold py-2.5 px-4 rounded-xl text-sm hover:scale-105 active:scale-95 transition-all">
+                    <button onclick="closeQRCodeModal()" class="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 text-gray-800 dark:text-white font-semibold py-2.5 px-3 rounded-lg text-xs transition-all duration-200 transform hover:scale-105 active:scale-95 min-h-[38px]">
                         Concluído
                     </button>
                 </div>
@@ -426,55 +429,47 @@
         </div>
     </div>
 
-    <!-- Modal de Sincronização / Backup -->
+    <!-- MODAL: Sincronização / Backup (Botões Corrigidos e Otimizados) -->
     <div id="backupModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative transform scale-95 transition-transform" id="backupModalContent">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-5 shadow-2xl relative transform scale-95 transition-transform" id="backupModalContent">
             <button onclick="closeBackupModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:scale-110 active:scale-90 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
 
-            <div class="space-y-4">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Gestão e Salvaguarda</h3>
+            <div class="space-y-3">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white">Gestão e Salvaguarda</h3>
                 <p class="text-xs text-gray-500 dark:text-gray-400">Guarda um ficheiro com todas as tuas notas e ideias para moveres para o outro telemóvel sem internet.</p>
                 
                 <div class="grid grid-cols-1 gap-2">
-                    <button onclick="exportAllNotes()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-2 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button onclick="exportAllNotes()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 px-3 rounded-lg flex items-center justify-center space-x-2 text-xs transition-all duration-200 transform hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 min-h-[40px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
                         <span>Descarregar Backup (.json)</span>
                     </button>
 
-                    <button onclick="document.getElementById('importFile').click()" class="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-2 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button onclick="document.getElementById('importFile').click()" class="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-semibold py-2.5 px-3 rounded-lg flex items-center justify-center space-x-2 text-xs transition-all duration-200 transform hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 min-h-[40px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                         </svg>
                         <span>Carregar Ficheiro de Notas (.json)</span>
                     </button>
                     <input type="file" id="importFile" class="hidden" accept=".json" onchange="importAllNotes(event)">
                 </div>
-
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
-                    <span class="text-xs font-semibold text-gray-500 block mb-1">Dicas Offline:</span>
-                    <ol class="text-xs text-gray-400 list-decimal pl-4 space-y-1">
-                        <li>Podes abrir este ficheiro diretamente no navegador sem qualquer acesso à internet.</li>
-                        <li>Exporta o ficheiro para manteres as tuas notas guardadas em segurança no telemóvel principal.</li>
-                    </ol>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Notificações Toast Rápidas (Efeito Slide-in inteligente) -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-6 py-3 rounded-xl shadow-2xl flex items-center space-x-2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
+    <!-- Notificações Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-5 py-2.5 rounded-xl shadow-2xl flex items-center space-x-2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
         <span id="toastIcon" class="text-green-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </span>
-        <span id="toastMessage" class="text-sm font-semibold">Mensagem informativa</span>
+        <span id="toastMessage" class="text-xs font-semibold">Mensagem informativa</span>
     </div>
 
     <script>
@@ -484,6 +479,13 @@
         let isRecording = false;
         let recognition = null;
         let isFocusMode = false;
+        let deferredPrompt = null;
+
+        // Gestos de Deslizar (Swipe) para Telemóveis
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
 
         // Inicialização Principal
         window.addEventListener('DOMContentLoaded', () => {
@@ -491,6 +493,7 @@
             loadNotesFromStorage();
             renderNotesList();
             setupEventListeners();
+            registerServiceWorker();
         });
 
         // Configuração de Eventos do Utilizador
@@ -499,11 +502,115 @@
             document.getElementById('searchBar').addEventListener('input', handleSearch);
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             document.getElementById('backupBtn').addEventListener('click', openBackupModal);
-            document.getElementById('backToListBtn').addEventListener('click', backToSidebar);
 
-            // Ajuste automático se o telemóvel for rodado/redimensionado
+            // Ouvinte de Gestos Tácteis Inteligente para o Menu (Evita conflito com digitação/seleção)
+            document.addEventListener('touchstart', e => {
+                // Se o utilizador tocar dentro do editor de texto ou na lista, desativa o gesto lateral para permitir seleção de texto e rolagem livre
+                if (e.target.closest('#noteContent') || e.target.closest('#notesList')) {
+                    touchStartX = 0;
+                    return;
+                }
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            document.addEventListener('touchend', e => {
+                if (touchStartX === 0) return;
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipeGesture();
+            }, { passive: true });
+
+            // Captura de Evento de Instalação PWA
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installPwaBtn').classList.remove('hidden');
+            });
+
+            // Ajuste automático de ecrã
             window.addEventListener('resize', handleResponsiveLayout);
             handleResponsiveLayout();
+        }
+
+        // --- SISTEMA DE GESTOS MÓVEIS (SWIPE) FILTRADO ---
+        function handleSwipeGesture() {
+            const swipeDistanceX = touchEndX - touchStartX;
+            const swipeDistanceY = touchEndY - touchStartY;
+            const thresholdX = 80; // Distância mínima horizontal
+            const thresholdY = 50; // Tolerância máxima vertical (para não confundir com rolagem para baixo)
+
+            // Garante que o arraste foi maioritariamente horizontal
+            if (Math.abs(swipeDistanceY) < thresholdY) {
+                // Deslizar para a direita no canto esquerdo do ecrã -> Abre menu lateral
+                if (swipeDistanceX > thresholdX && touchStartX < 60) {
+                    openSidebar();
+                }
+                // Deslizar para a esquerda -> Fecha o menu lateral
+                if (swipeDistanceX < -thresholdX) {
+                    closeSidebar();
+                }
+            }
+        }
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarPanel');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                openSidebar();
+            } else {
+                closeSidebar();
+            }
+        }
+
+        function openSidebar() {
+            triggerHaptic(15);
+            const sidebar = document.getElementById('sidebarPanel');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('opacity-100', 'pointer-events-auto');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebarPanel');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.remove('opacity-100', 'pointer-events-auto');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Vibração Táctil Premium
+        function triggerHaptic(ms = 25) {
+            if (navigator.vibrate) {
+                navigator.vibrate(ms);
+            }
+        }
+
+        // --- REGISTO DO SERVICE WORKER ---
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('Service Worker registado offline!'))
+                .catch(err => console.log('Falha ao registar Service Worker:', err));
+            }
+        }
+
+        // Executar Instalação do PWA nativo
+        function triggerPwaInstallation() {
+            triggerHaptic(40);
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('Obrigado por instalar o QuickNotes IA!', 'success');
+                        document.getElementById('installPwaBtn').classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                });
+            }
         }
 
         // Carrega Notas do utilizador com suporte a armazenamento offline
@@ -513,7 +620,6 @@
                 if (storedNotes) {
                     notes = JSON.parse(storedNotes);
                 } else {
-                    // Inicia completamente vazio para dar total foco!
                     notes = [];
                     saveToStorage();
                 }
@@ -522,7 +628,7 @@
             }
         }
 
-        // Carregar notas de demonstração opcionais caso queiras exemplos rápidos
+        // Carregar notas de demonstração
         function loadDemoNotes() {
             notes = [
                 {
@@ -548,6 +654,52 @@
             showToast('Notas de demonstração carregadas!', 'success');
         }
 
+        // NOVO: Função para Descarregar a Nota Atual em formato .txt com Título Personalizado ou Fallback Inteligente (Via Data URI robusto)
+        function downloadNoteAsTxt() {
+            if (!currentNoteId) {
+                showToast('Nenhuma nota selecionada para descarregar!', 'error');
+                return;
+            }
+            
+            const note = notes.find(n => n.id === currentNoteId);
+            if (!note) return;
+
+            let title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value;
+
+            if (!content && !title) {
+                showToast('A nota está totalmente vazia!', 'error');
+                return;
+            }
+
+            // Fallback de título personalizado se o campo estiver vazio ou for o padrão de criação
+            if (!title || title.toLowerCase() === 'ideia nova' || title.toLowerCase() === 'nova ideia') {
+                const dateStr = new Date().toLocaleDateString('pt-PT').replace(/\//g, '-');
+                title = `Ideia sem Título - ${dateStr}`;
+            }
+
+            // Limpa caracteres especiais do nome do ficheiro para compatibilidade móvel
+            const fileName = title.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove acentos
+                .replace(/[^a-z0-9\s-]/g, '')                     // Mantém letras, números, traços e espaços
+                .trim()
+                .replace(/\s+/g, '_') + '.txt';                   // Substitui espaços por underscores
+
+            // Usando Data URI amigável e universal (Bypassa bloqueios de segurança WebView/Hermit)
+            const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(content);
+            
+            // Simula clique de download invisível de alta compatibilidade
+            const a = document.createElement('a');
+            a.setAttribute("href", dataStr);
+            a.setAttribute("download", fileName);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            triggerHaptic(30); // Pequena vibração ao descarregar com sucesso
+            showToast(`Guardado como "${fileName}"`, 'success');
+        }
+
         function saveToStorage() {
             try {
                 localStorage.setItem('quicknotes_ia_data', JSON.stringify(notes));
@@ -556,7 +708,7 @@
             }
         }
 
-        // Renderizar a lista de Notas na Barra Lateral com Animações Fluidas
+        // Renderizar a lista de Notas
         function renderNotesList(filterText = '') {
             const listContainer = document.getElementById('notesList');
             listContainer.innerHTML = '';
@@ -572,14 +724,13 @@
 
             if (filteredNotes.length === 0) {
                 listContainer.innerHTML = `
-                    <div class="text-center py-8 text-gray-400 dark:text-gray-500 animate-slide-in">
+                    <div class="text-center py-6 text-gray-400 dark:text-gray-500 animate-slide-in">
                         <p class="text-xs">Nenhuma nota encontrada.</p>
                     </div>
                 `;
                 return;
             }
 
-            // Ordenação inteligente: primeiro as Notas Fixadas (Pinned), depois por Data mais recente
             filteredNotes.sort((a, b) => {
                 if (a.isPinned && !b.isPinned) return -1;
                 if (!a.isPinned && b.isPinned) return 1;
@@ -590,30 +741,29 @@
                 const isSelected = note.id === currentNoteId;
                 const noteElement = document.createElement('div');
                 
-                // Adiciona a classe de animação suave com atraso progressivo (micro-interações)
-                noteElement.className = `p-3 rounded-lg cursor-pointer transition-all border animate-slide-in ${
+                noteElement.className = `p-2.5 rounded-lg cursor-pointer transition-all border animate-slide-in ${
                     isSelected 
-                        ? 'bg-brand-50 border-brand-400 dark:bg-brand-950/40 dark:border-brand-600 text-brand-900 dark:text-brand-100 font-semibold' 
+                        ? 'bg-brand-50 border-brand-300 dark:bg-brand-950/40 dark:border-brand-600 text-brand-900 dark:text-brand-100 font-semibold' 
                         : 'border-transparent hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300'
                 }`;
-                noteElement.style.animationDelay = `${index * 0.05}s`;
+                noteElement.style.animationDelay = `${index * 0.04}s`;
                 noteElement.onclick = () => selectNote(note.id);
 
-                const previewContent = note.content ? note.content.substring(0, 50) + '...' : 'Sem conteúdo...';
+                const previewContent = note.content ? note.content.substring(0, 40) + '...' : 'Sem conteúdo...';
 
                 noteElement.innerHTML = `
                     <div class="flex items-start justify-between gap-1">
-                        <div class="flex items-center space-x-1.5 truncate">
+                        <div class="flex items-center space-x-1 truncate">
                             ${note.isPinned ? `
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500 flex-shrink-0 animate-pulse" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-yellow-500 flex-shrink-0 animate-pulse" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.176 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 12.08c-.773-.568-.375-1.81.588-1.81h4.908a1 1 0 00.951-.69l1.519-4.674z" />
                                 </svg>
                             ` : ''}
-                            <h4 class="font-bold text-sm truncate">${note.title || 'Sem título'}</h4>
+                            <h4 class="font-bold text-xs truncate">${note.title || 'Sem título'}</h4>
                         </div>
-                        ${note.tag ? `<span class="text-[9px] bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 px-1.5 py-0.5 rounded-md flex-shrink-0 transition-all">${note.tag}</span>` : ''}
+                        ${note.tag ? `<span class="text-[8px] bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 px-1.5 py-0.5 rounded-md flex-shrink-0 transition-all">${note.tag}</span>` : ''}
                     </div>
-                    <p class="text-xs opacity-75 line-clamp-2 mt-1 select-none">${previewContent}</p>
+                    <p class="text-[11px] opacity-75 line-clamp-1 mt-0.5 select-none">${previewContent}</p>
                 `;
                 listContainer.appendChild(noteElement);
             });
@@ -629,7 +779,6 @@
             document.getElementById('noteContent').value = note.content;
             document.getElementById('noteTag').value = note.tag || '';
             
-            // Alterna o ícone de fixado (pin) no menu
             const pinIcon = document.getElementById('pinIcon');
             if (note.isPinned) {
                 pinIcon.classList.add('text-yellow-500', 'fill-yellow-500');
@@ -637,7 +786,6 @@
                 pinIcon.classList.remove('text-yellow-500', 'fill-yellow-500');
             }
 
-            // Oculta e remove placeholder vazio suavemente com opacidade
             const emptyState = document.getElementById('emptyState');
             emptyState.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => {
@@ -645,18 +793,14 @@
             }, 300);
 
             updateCounters();
-            
-            // Foco responsivo para dispositivos móveis
-            if (window.innerWidth < 768) {
-                document.getElementById('sidebarPanel').classList.add('hidden');
-                document.getElementById('editorPanel').classList.remove('hidden');
-            }
+            closeSidebar(); // Fecha gaveta lateral automaticamente ao tocar na nota no telemóvel
 
             renderNotesList(document.getElementById('searchBar').value);
         }
 
         // Criar Nova Nota de forma rápida
         function createNewNote() {
+            triggerHaptic(15);
             const newNote = {
                 id: Date.now().toString(),
                 title: 'Ideia Nova',
@@ -679,12 +823,11 @@
             const noteIndex = notes.findIndex(n => n.id === currentNoteId);
             if (noteIndex === -1) return;
 
-            // Ativa o estado de carregamento de salvamento instantâneo
             const indicator = document.getElementById('savedIndicator');
             indicator.classList.remove('text-green-500');
             indicator.classList.add('text-brand-500');
             indicator.innerHTML = `
-                <svg class="animate-spin -ml-1 mr-1.5 h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg class="animate-spin -ml-1 mr-1.5 h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg> Guardar...`;
@@ -697,12 +840,11 @@
             saveToStorage();
             updateCounters();
 
-            // Desliga indicator após breve atraso de digitação
             setTimeout(() => {
                 indicator.classList.remove('text-brand-500');
                 indicator.classList.add('text-green-500');
                 indicator.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1 scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg> Guardado`;
             }, 300);
@@ -717,7 +859,6 @@
             notes[noteIndex].isPinned = !notes[noteIndex].isPinned;
             saveToStorage();
             
-            // Atualiza o estado visual do botão no editor
             const pinIcon = document.getElementById('pinIcon');
             if (notes[noteIndex].isPinned) {
                 pinIcon.classList.add('text-yellow-500', 'fill-yellow-500', 'scale-110');
@@ -730,8 +871,9 @@
             renderNotesList(document.getElementById('searchBar').value);
         }
 
-        // --- BARRA DE FORMATAÇÃO DE TEXTO ---
+        // BARRA DE FORMATAÇÃO DE TEXTO
         function insertFormat(prefix, suffix = '') {
+            triggerHaptic(10);
             const textarea = document.getElementById('noteContent');
             const start = textarea.selectionStart;
             const end = textarea.selectionEnd;
@@ -746,21 +888,21 @@
             saveCurrentNote();
         }
 
-        // --- MODO DE FOCO ZEN DESLIZANTE ---
+        // MODO DE FOCO ZEN DESLIZANTE
         function toggleFocusMode() {
+            triggerHaptic(15);
             const sidebar = document.getElementById('sidebarPanel');
             const icon = document.getElementById('focusModeIcon');
             isFocusMode = !isFocusMode;
             
             if (isFocusMode) {
-                // Desliza a barra para fora do ecrã de forma limpa
-                sidebar.style.marginLeft = "-340px";
+                sidebar.style.marginLeft = "-300px";
                 sidebar.style.opacity = "0";
                 setTimeout(() => {
                     sidebar.classList.add('hidden');
                 }, 300);
                 icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />`;
-                showToast('Modo Foco ativado! Concentra-te nas tuas ideias.', 'info');
+                showToast('Modo Foco ativado!', 'info');
             } else {
                 sidebar.classList.remove('hidden');
                 setTimeout(() => {
@@ -772,12 +914,12 @@
             }
         }
 
-        // --- DITADO POR VOZ (SPEECH TO TEXT COM SINALIZADOR VISUAL) ---
+        // DITADO POR VOZ COM RESPOSTA TÁCTIL
         function toggleSpeech() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             
             if (!SpeechRecognition) {
-                showToast('O seu navegador não suporta ditado de voz.', 'error');
+                showToast('O seu telemóvel não suporta ditado de voz nativo.', 'error');
                 return;
             }
 
@@ -790,9 +932,10 @@
                 recognition = new SpeechRecognition();
                 recognition.continuous = true;
                 recognition.interimResults = false;
-                recognition.lang = 'pt-PT'; // Português de Portugal
+                recognition.lang = 'pt-PT';
 
                 recognition.onstart = () => {
+                    triggerHaptic(50);
                     isRecording = true;
                     micBtn.classList.add('bg-red-500', 'text-white', 'border-red-600');
                     micBtnText.innerText = "A ouvir...";
@@ -805,9 +948,9 @@
                     const resultText = event.results[event.results.length - 1][0].transcript;
                     const textarea = document.getElementById('noteContent');
                     
-                    // Adiciona o texto falado ao conteúdo da nota de forma fluida
                     textarea.value += (textarea.value ? " " : "") + resultText;
                     saveCurrentNote();
+                    triggerHaptic(15);
                 };
 
                 recognition.onerror = (err) => {
@@ -845,7 +988,7 @@
             }
         }
 
-        // --- CONFIRMAÇÃO DE ELIMINAÇÃO PERSONALIZADA (ANIMAÇÃO SPRING) ---
+        // CONFIRMAÇÃO DE ELIMINAÇÃO PERSONALIZADA
         function openDeleteModal() {
             if (!currentNoteId) return;
             const modal = document.getElementById('deleteModal');
@@ -876,17 +1019,14 @@
         function confirmDeleteCurrentNote() {
             if (!currentNoteId) return;
 
-            // Encontra a nota para animar a sua remoção visual
             notes = notes.filter(n => n.id !== currentNoteId);
             saveToStorage();
             currentNoteId = null;
 
-            // Reseta campos do editor
             document.getElementById('noteTitle').value = '';
             document.getElementById('noteContent').value = '';
             document.getElementById('noteTag').value = '';
 
-            // Restaura o ecrã vazio amigável
             const emptyState = document.getElementById('emptyState');
             emptyState.classList.remove('hidden');
             setTimeout(() => {
@@ -897,7 +1037,7 @@
             closeDeleteModal();
             showToast('Nota eliminada permanentemente.', 'info');
             renderNotesList();
-            backToSidebar();
+            closeSidebar();
         }
 
         // Pesquisa de Notas
@@ -905,7 +1045,7 @@
             renderNotesList(e.target.value);
         }
 
-        // Copiar conteúdo e preparar para colar na IA
+        // Copiar conteúdo e vibrar subtilmente
         function copyAndPrepareForIA() {
             const content = document.getElementById('noteContent').value;
             if (!content) {
@@ -917,12 +1057,13 @@
             document.body.appendChild(dummy);
             dummy.value = content;
             dummy.select();
-            dummy.setSelectionRange(0, 99999); // Suporte para iOS
+            dummy.setSelectionRange(0, 99999);
             
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
-                    showToast('Copiado! Cola diretamente na tua IA.', 'success');
+                    triggerHaptic(40);
+                    showToast('Copiado! Já podes colar na tua IA.', 'success');
                 } else {
                     showToast('Não foi possível copiar automaticamente.', 'error');
                 }
@@ -932,7 +1073,7 @@
             document.body.removeChild(dummy);
         }
 
-        // Leitura em Voz Alta Offline (Sintetizador de Voz Nativo)
+        // Leitura em Voz Alta Offline
         function readAloud() {
             const content = document.getElementById('noteContent').value;
             if (!content) {
@@ -940,7 +1081,6 @@
                 return;
             }
 
-            // Se já estiver a falar, cancela a voz
             if (window.speechSynthesis.speaking) {
                 window.speechSynthesis.cancel();
                 showToast('Leitura pausada.', 'info');
@@ -948,7 +1088,7 @@
             }
 
             const utterance = new SpeechSynthesisUtterance(content);
-            utterance.lang = 'pt-PT'; // Tenta sintetizar em Português
+            utterance.lang = 'pt-PT';
             
             utterance.onend = () => {
                 showToast('Leitura concluída!', 'success');
@@ -960,6 +1100,7 @@
 
         // Abrir Modal do QR Code com Animação Elástica
         function openQRCodeModal() {
+            triggerHaptic(15);
             const title = document.getElementById('noteTitle').value || 'Sem título';
             const content = document.getElementById('noteContent').value;
 
@@ -1015,6 +1156,7 @@
 
         // Modais de Backup / Sincronização
         function openBackupModal() {
+            triggerHaptic(15);
             const modal = document.getElementById('backupModal');
             const contentDiv = document.getElementById('backupModalContent');
             
@@ -1075,7 +1217,7 @@
             reader.readAsText(file);
         }
 
-        // Atualizar Contadores de Caracteres e Palavras
+        // Contadores
         function updateCounters() {
             const content = document.getElementById('noteContent').value || '';
             document.getElementById('charCounter').innerText = `${content.length} ${content.length === 1 ? 'carater' : 'carateres'}`;
@@ -1084,28 +1226,18 @@
             document.getElementById('wordCounter').innerText = `${words} ${words === 1 ? 'palavra' : 'palavras'}`;
         }
 
-        // Responsivo móvel: Voltar para lista de notas
-        function backToSidebar() {
-            if (window.innerWidth < 768) {
-                document.getElementById('sidebarPanel').classList.remove('hidden');
-                document.getElementById('editorPanel').classList.add('hidden');
-            }
-        }
-
         function handleResponsiveLayout() {
             if (window.innerWidth >= 768) {
-                document.getElementById('sidebarPanel').classList.remove('hidden');
-                document.getElementById('editorPanel').classList.remove('hidden');
+                const sidebar = document.getElementById('sidebarPanel');
+                sidebar.classList.remove('-translate-x-full');
             } else {
-                if (!currentNoteId) {
-                    document.getElementById('sidebarPanel').classList.remove('hidden');
-                    document.getElementById('editorPanel').classList.add('hidden');
-                }
+                closeSidebar();
             }
         }
 
-        // --- MODO ESCURO SUAVE ---
+        // MODO ESCURO SUAVE
         function toggleTheme() {
+            triggerHaptic(10);
             const htmlElement = document.documentElement;
             const sunIcon = document.getElementById('sunIcon');
             const moonIcon = document.getElementById('moonIcon');
@@ -1144,7 +1276,7 @@
             }
         }
 
-        // Notificações Toast Não Intrusivas com efeito deslizante tátil
+        // Toasts
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toastMessage');
@@ -1154,29 +1286,27 @@
 
             if (type === 'success') {
                 toastIcon.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 `;
             } else if (type === 'info') {
                 toastIcon.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 `;
             } else {
                 toastIcon.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 animate-ping" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 animate-ping" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                 `;
             }
 
-            // Exibe o Toast com uma suave subida e opacidade
             toast.classList.remove('opacity-0', 'translate-y-4');
             toast.classList.add('opacity-100', 'translate-y-0');
 
-            // Esconde automaticamente após 2.5 segundos
             setTimeout(() => {
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'translate-y-4');
