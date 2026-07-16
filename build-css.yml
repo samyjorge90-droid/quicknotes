@@ -1,0 +1,33 @@
+name: Build Tailwind CSS
+
+on:
+  push:
+    branches: [main]
+
+# Permissões necessárias para que o Action possa fazer commit do CSS gerado de volta ao repositório
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar Tailwind CLI
+        run: npm install -D tailwindcss@3
+
+      - name: Gerar CSS estático e minificado
+        run: npx tailwindcss -i ./src/input.css -o ./tailwind.min.css --minify
+
+      - name: Commit automático do CSS gerado
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "build: atualiza tailwind.min.css [skip ci]"
+          file_pattern: tailwind.min.css
